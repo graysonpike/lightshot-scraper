@@ -13,19 +13,24 @@ HEADERS = {
 
 
 def download_image(id, filename):
-	page = requests.get(LIGHTSHOT_URL + id, headers=HEADERS)
-	soup = BeautifulSoup(page.text, 'html.parser')
+	print("Downloading image: %s  ... " % (id))
+	try:
+		page = requests.get(LIGHTSHOT_URL + id, headers=HEADERS)
+		soup = BeautifulSoup(page.text, 'html.parser')
 
-	img_url = soup.find("img", attrs={"class": "screenshot-image"})['src']
-	if not "http" in img_url:
-		img_url = img_url.strip('/')
-		img_url = "http://" + img_urlx
+		img_url = soup.find("img", attrs={"class": "screenshot-image"})['src']
+		if not "http" in img_url:
+			img_url = img_url.strip('/')
+			img_url = "http://" + img_url
 
-	image_req = requests.get(img_url, stream=True, headers=HEADERS)
-	if image_req.status_code == 200:
-		file = open(filename, 'wb')
-		image_req.raw.decode_content = True
-		shutil.copyfileobj(image_req.raw, file)
+		image_req = requests.get(img_url, stream=True, headers=HEADERS)
+		if image_req.status_code == 200:
+			file = open(filename, 'wb')
+			image_req.raw.decode_content = True
+			shutil.copyfileobj(image_req.raw, file)
+	except Exception:
+		print("Error")
+	print("Done")
 
 
 def test():
