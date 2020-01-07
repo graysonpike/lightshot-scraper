@@ -18,8 +18,8 @@ def download_image(id, filename):
 
 	img_url = soup.find("img", attrs={"class": "screenshot-image"})['src']
 	if not "http" in img_url:
-		img_url.strip('/')
-		img_url = "http://" + img_url
+		img_url = img_url.strip('/')
+		img_url = "http://" + img_urlx
 
 	image_req = requests.get(img_url, stream=True, headers=HEADERS)
 	if image_req.status_code == 200:
